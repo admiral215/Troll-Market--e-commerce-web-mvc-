@@ -1,0 +1,41 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta19
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+  <head th:replace="~{layout::head('Troll Market - Home')}">
+  </head>
+  <body >
+    <div class="page">
+      <!-- Navbar -->
+      <header th:replace="~{layout :: header}" class="navbar navbar-expand-md d-print-none" >
+      </header>
+      <nav th:replace="~{layout :: nav}" class="navbar-expand-md">
+      </nav>
+      <div class="page-wrapper">
+        <!-- Page body -->
+        <div class="page-body">
+          <div class="container-xl d-flex flex-column justify-content-center">
+            <div class="empty">
+              <div class="empty-img">
+                <img th:src="@{/resources/undraw_printing_invoices_5r4r.svg}" height="512px" alt="">
+              </div>
+              <p class="empty-title">Welcome to Troll Market</p>
+              <p class="empty-subtitle text-muted">
+                Home
+              </p>
+            </div>
+          </div>
+        </div>
+        <footer class="footer footer-transparent d-print-none">
+        </footer>
+      </div>
+    </div>
+    <!-- Libs JS -->
+  </body>
+</html>

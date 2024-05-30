@@ -1,0 +1,254 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta19
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+  <head th:replace="~{layout::head('Troll Market - Merchandise')}">
+  </head>
+  <body >
+    <div class="page">
+      <!-- Navbar -->
+      <header th:replace="~{layout :: header}" class="navbar navbar-expand-md d-print-none" >
+      </header>
+      <nav th:replace="~{layout :: nav}" class="navbar-expand-md">
+      </nav>
+      <div class="page-wrapper">
+        <div class=" navbar-expand-md">
+          <div href="#" class="card card-link">
+            <div class="card-body">
+              <a href="/merchandise">Merchandise</a>
+            </div>
+          </div>
+        </div>
+        <!-- Page body -->
+        <div class="page-body">
+          <div class="container-xl d-flex flex-column align-items-center">
+
+              <div th:if="${deleteError}" class="toast mb-3 align-self-start show" role="alert" aria-live="assertive" aria-atomic="true">
+                  <div class="toast-header bg-danger">
+                      <strong class="me-auto text-white">Delete Error</strong>
+                      <button type="button" class="btn-close text-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                  </div>
+                  <div class="toast-body">
+                      Your product has ordered.
+                  </div>
+              </div>
+
+            <!-- Card Table-->
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-status-top bg-danger"></div>
+
+                <div class="card-body">
+                  <a href="#" class="btn btn-outline-primary mb-4 upsert-button" data-name="/merchandise/insert" data-bs-toggle="modal" data-bs-target="#upsert-modal">
+                    Insert New Product
+                </a>
+                  <div class="table-responsive">
+                    <table class="table table-vcenter card-table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Action</th>
+                          <th>Name</th>
+                          <th>Category</th>
+                          <th>Discontinue</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        <tbody>
+                          <tr th:each="product : ${products}">
+                              <td>
+                                  <div class="d-flex flex-row" style="width:120px">
+                                      <div class="">
+                                          <button th:disabled="${product.isHasOrder}"  type="submit" href="#" class="btn btn-outline-secondary m-1 upsert-button"
+                                          th:data-name="'/merchandise/update/' + ${product.id}" 
+                                          data-bs-toggle="modal" 
+                                          data-bs-target="#upsert-modal"
+                                          th:data-id="${product.id}" 
+                                          th:data-product="${product.name}" 
+                                          th:data-category="${product.category}" 
+                                          th:data-description="${product.description}" 
+                                          th:data-price="${product.price}" 
+                                          th:data-discontinue="${product.discontinue}">
+                                            Edit
+                                          </button>
+                                      </div>
+                                      <div class="">
+                                        <form th:action="@{'/merchandise/delete/' + ${product.id}}" method="post">
+                                          <button th:disabled="${product.isHasCart}"  type="submit" class="btn btn-outline-danger m-1">
+                                            Delete
+                                          </button>
+                                        </form>
+                                          
+                                      </div>
+                                      <div class="">
+                                          <a href="#" class="btn btn-outline-info m-1 info-button" 
+                                          data-bs-toggle="modal" 
+                                          data-bs-target="#info-modal"
+                                          th:data-id="${product.id}" 
+                                          th:data-product="${product.name}" 
+                                          th:data-category="${product.category}" 
+                                          th:data-description="${product.description}" 
+                                          th:data-price="${product.priceCurrency}" 
+                                          th:data-discontinue="${product.discontinue}">
+                                            Info
+                                          </a>
+                                      </div>
+                                      <div class="">
+                                        <form th:action="@{'/merchandise/discontinue/' + ${product.id}}" method="post">
+                                          <button th:disabled="${product.discontinue == 'Yes'}" type="submit" class="btn btn-outline-warning m-1">
+                                            Discontinued
+                                        </button>
+                                        </form>
+                                          
+                                      </div>
+                                  </div>
+
+                                
+                              </td>
+                              <td th:text="${product.name}"></td>
+                              <td th:text="${product.category}"></td>
+                              <td th:text="${product.discontinue}"></td>
+                          </tr>
+                          <tfoot>
+                            <tr>
+                                <td colspan="4">
+                                    <div class="pagination justify-content-between" >
+                                        <div th:if="${products}">
+                                            <p>
+                                                page <span th:text="${products.getNumber() + 1}"></span> of
+                                                <span th:text="${products.getTotalPages()}"></span>
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <th:block th:if="${products.totalPages > 0}"
+                                                      th:each="page : ${#numbers.sequence(1, products.totalPages)}">
+                                                <a class="btn btn-outline-blue" th:href="@{/merchandise(
+                                        pageNumber = ${page}
+                                        )}" th:text="${page}"></a>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <footer class="footer footer-transparent d-print-none">
+        </footer>
+      </div>
+
+<!--        Upsert Modal-->
+      <div class="modal modal-blur fade "  id="upsert-modal" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="modal-title">Merchandise Form</div>
+              <div>
+                  <form class="upsert" id="upsert" method="post" th:object="${dto}">
+                      <div class="form-group mb-2">
+                          <div class="text-danger" th:errors="*{name}"></div>
+                          <label for="name">Name</label>
+                          <input type="text" class="form-control" id="name" name="name">
+                      </div>
+                      <div class="form-group mb-2">
+                          <div class="text-danger" th:errors="*{category}"></div>
+                          <label for="category">Category</label>
+                          <input type="text" class="form-control" id="category" name="category" >
+                      </div>
+                      <div class="form-group mb-2">
+                          <div class="text-danger" th:errors="*{description}"></div>
+                          <label for="description">Description</label>
+                          <textarea class="form-control" id="description" name="description" rows="4" ></textarea>
+                      </div>
+                      <div class="form-group mb-2">
+                          <div class="text-danger" th:errors="*{price}"></div>
+                          <label for="price">Price</label>
+                          <input type="number" class="form-control" id="price" name="price" >
+                      </div>
+                      <div class="form-group mb-2">
+                  
+                          <label>Discontinue</label>
+                          <div class="form-check">
+                              <input class="form-check-input" type="radio" name="discontinue" id="discontinueYes" value="true">
+                              <label class="form-check-label" for="discontinueYes">
+                                  Yes
+                              </label>
+                          </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary w-100">Submit</button>
+                  </form>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal modal-blur fade " id="info-modal" tabindex="-1" style="display: none;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Info</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table table-borderless w-25" th:object="${user}">
+                <tr>
+                    <td>Name</td>
+                    <td>:</td>
+                    <td id="info-name"></td>
+                </tr>
+                <tr>
+                    <td>Category </td>
+                    <td>:</td>
+                    <td id="info-category"></td>
+                </tr>
+                <tr>
+                    <td> Description </td>
+                    <td>:</td>
+                    <td id="info-description"></td>
+                </tr>
+                <tr>
+                    <td>Price </td>
+                    <td>:</td>
+                    <td id="info-price"></td>
+                </tr>
+                <tr>
+                  <td>Discontinue </td>
+                  <td>:</td>
+                  <td id="info-discontinue"></td>
+              </tr>
+            </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div th:if="${showModal}">
+        <script th:inline="javascript">
+          document.addEventListener('DOMContentLoaded', function () {
+            var myModal = new bootstrap.Modal(document.getElementById('upsert-modal'));
+            myModal.show();
+          });
+        </script>
+      </div>
+    </div>
+
+  </body>
+</html>

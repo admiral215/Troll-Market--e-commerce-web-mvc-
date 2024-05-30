@@ -1,0 +1,165 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta19
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+<head th:replace="~{layout::head('Troll Market - Profile')}">
+</head>
+<body>
+<div class="page">
+    <!-- Navbar -->
+    <header th:replace="~{layout :: header}" class="navbar navbar-expand-md d-print-none">
+    </header>
+    <nav th:replace="~{layout :: nav}" class="navbar-expand-md">
+    </nav>
+    <div class="page-wrapper">
+        <!-- Page body -->
+        <div class=" navbar-expand-md">
+            <div href="#" class="card card-link">
+              <div class="card-body">
+                <a href="/profile">Profile</a>
+              </div>
+            </div>
+          </div>
+        <div class="page-body">
+            <div class=" page-body container-xl d-flex flex-column align-items-center">
+
+                <!--Card Profile-->
+                <div class="col-lg-6 mb-4 align-self-lg-start" >
+                    <div class="card">
+                        <div class="card-status-start bg-primary"></div>
+                        <div class="card-body">
+                            <h3 class="card-title">Summary</h3>
+                            <table class="table table-borderless w-25" th:object="${user}">
+                                <tr>
+                                    <td>Name</td>
+                                    <td>:</td>
+                                    <td th:text="*{name}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Role </td>
+                                    <td>:</td>
+                                    <td th:text="${role}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Address </td>
+                                    <td>:</td>
+                                    <td th:text="*{address}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Balance </td>
+                                    <td>:</td>
+                                    <td th:text="*{balance}"></td>
+                                    <th:block sec:authorize="hasAuthority('BUYER')">
+                                        <td>
+                                            <a href="#" class="btn btn-outline-primary active w-100 h-50" data-bs-toggle="modal" data-bs-target="#deposit-modal">
+                                                Deposit
+                                              </a>
+                                        </td>
+                                    </th:block>
+                                    
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Table-->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-status-top bg-danger"></div>
+                        <div class="card-body">
+                            <h3 class="card-title">My Transaction History</h3>
+                            <div class="table-responsive">
+                                <table class="table table-vcenter card-table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Shipment</th>
+                                        <th>Total Price</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="order : ${orders}">
+                                        <td th:text="${order.orderDate}"></td>
+                                        <td th:text="${order.product}"></td>
+                                        <td th:text="${order.quantity}"></td>
+                                        <td th:text="${order.shipment}">
+                                        <td th:text="${order.totalPrice}"></td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5">
+                                                <div class="pagination justify-content-between" >
+                                                    <div th:if="${orders}">
+                                                        <p>
+                                                            page <span th:text="${orders.getNumber() + 1}"></span> of
+                                                            <span th:text="${orders.getTotalPages()}"></span>
+                                                        </p>
+                                                    </div>
+                                                    <div>
+                                                        <th:block th:if="${orders.totalPages > 0}"
+                                                                  th:each="page : ${#numbers.sequence(1, orders.totalPages)}">
+                                                            <a class="btn btn-outline-blue" th:href="@{/profile(
+                                                    pageNumber = ${page},
+                                                    pageSize = ${pageSize}
+                                                    )}" th:text="${page}"></a>
+                                                        </th:block>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <footer class="footer footer-transparent d-print-none">
+        </footer>
+    </div>
+</div>
+<!-- Deposit Modal -->
+<div class="modal modal-blur fade" id="deposit-modal" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="modal-title">Deposit</div>
+          <div>
+            <form action="/profile/deposit" method="post">
+                <div class="mb-3">
+                    <label for="balance" class="form-label">Balance <span class="text-danger" th:errors="${dto.balance}"></span></label>
+                    <input name="balance" type="number" class="form-control" id="balance">
+                  </div>
+                  <button type="submit" class="btn btn-outline-success w-50">Deposit</button>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+<div th:if="${showModal}">
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+          var myModal = new bootstrap.Modal(document.getElementById('deposit-modal'));
+          myModal.show();
+        });
+    </script>
+</div>
+</html>

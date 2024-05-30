@@ -1,0 +1,55 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta19
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Troll Market - Choose Role</title>
+    <!-- CSS files -->
+    <link th:href="@{/resources/css/tabler.min.css?1684106062}" rel="stylesheet"/>
+    <link th:href="@{/resources/css/tabler-flags.min.css?1684106062}" rel="stylesheet"/>
+    <link th:href="@{/resources/css/tabler-payments.min.css?1684106062}" rel="stylesheet"/>
+    <link th:href="@{/resources/css/tabler-vendors.min.css?1684106062}" rel="stylesheet"/>
+    <link th:href="@{/resources/css/demo.min.css?1684106062}" rel="stylesheet"/>
+    <style>
+      @import url('https://rsms.me/inter/inter.css');
+      :root {
+      	--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+      	font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body  class=" d-flex flex-column">
+    <script th:src="@{resources/js/demo-theme.min.js?1684106062}"></script>
+    <div class="page page-center">
+      <div class="container container-tight py-4">
+        <div class="card card-md">
+          <div class="card-body">
+            <h2 class="h2 text-center mb-4">Choose your Role</h2>
+            <form th:action="@{/role}" method="post" autocomplete="off" novalidate>
+              <div class="text-danger" th:errors="${dto.role}"></div>
+              <select class="form-select mb-4" aria-label="Default select example" name="role">
+                <option selected th:value="null">Open this select menu</option>
+                <option th:each=" role : ${roles}" th:value="${role}" th:text="${role}">One</option>
+              </select>
+              <button type="submit" class="btn btn-primary w-100">Choose Role</button>
+            </form>
+          </div>
+      </div>
+    </div>
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script th:src="@{resources/js/tabler.min.js?1684106062}" defer></script>
+    <script th:src="@{resources/js/demo.min.js?1684106062}" defer></script>
+  </body>
+</html>

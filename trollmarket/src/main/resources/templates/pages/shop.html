@@ -1,0 +1,228 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta19
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+<head th:replace="~{layout::head('Troll Market - Shop')}">
+</head>
+<body>
+<div class="page">
+    <!-- Navbar -->
+    <header th:replace="~{layout :: header}" class="navbar navbar-expand-md d-print-none">
+    </header>
+    <nav th:replace="~{layout :: nav}" class="navbar-expand-md">
+    </nav>
+    <div class="page-wrapper">
+        <!-- Page body -->
+        <div class=" navbar-expand-md">
+            <div href="#" class="card card-link">
+              <div class="card-body">
+                <a href="/shop">Shop</a>
+              </div>
+            </div>
+          </div>
+        <div class="page-body">
+            <div class=" page-body container-xl d-flex flex-column align-items-center">
+
+                <!--Card Search-->
+                <div class="align-self-lg-start mb-4" >
+                    <div class="card">
+                        <div class="card-status-start bg-primary"></div>
+                        <div class="card-body">
+                            <h3 class="card-title">Search Product</h3>
+                            <form action="/shop" method="get" th:object="${dto}">
+                                <div class="row">
+                                    <div class="col-md-3 mb-3 form-group">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="name" name="name" th:value="*{name}">
+                                    </div>
+                                    <div class="col-md-3  form-group">
+                                        <label for="category" class="form-label">Category</label>
+                                        <input type="text" class="form-control" id="category" name="category" th:value="*{category}">
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <input class="form-control" id="description" name="description" th:value="*{description}">
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-primary">Search</button>
+                                </div>
+                                
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Table-->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-status-top bg-danger"></div>
+                        <div class="card-body">
+                            <h3 class="card-title">Products</h3>
+                            <div class="table-responsive">
+                                <table class="table table-vcenter card-table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Actions</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="product : ${products}">
+                                        <td>
+                                            <div class="d-flex flex-row" style="width:80px">
+                                                <div class="">
+                                                    <a type="submit" href="#" class="btn btn-outline-green m-1 shop-cart-button"
+                                                    th:data-name="'/shop/cart/' + ${product.id}"
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#shop-cart-modal">
+                                                        Add To Cart
+                                                    </a>
+                                                </div>
+                                                <div class="">
+                                                    <a type="submit" href="#" class="btn btn-outline-info m-1 shop-info-button" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#shop-info-modal"
+                                                    th:data-id="${product.id}" 
+                                                    th:data-product="${product.name}" 
+                                                    th:data-category="${product.category}" 
+                                                    th:data-description="${product.description}" 
+                                                    th:data-price="${product.priceCurrency}"
+                                                    th:data-seller="${product.sellerName}"
+                                                    >
+                                                        Info
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        <td th:text="${product.name}"></td>
+                                        <td th:text="${product.priceCurrency}"></td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3">
+                                                <div class="pagination justify-content-between" >
+                                                    <div th:if="${products}">
+                                                        <p>
+                                                            page <span th:text="${products.getNumber() + 1}"></span> of
+                                                            <span th:text="${products.getTotalPages()}"></span>
+                                                        </p>
+                                                    </div>
+                                                    <div>
+                                                        <th:block th:if="${products.totalPages > 0}"
+                                                                  th:each="page : ${#numbers.sequence(1, products.totalPages)}">
+                                                            <a class="btn btn-outline-blue" th:href="@{/shop(
+                                                    pageNumber = ${page},
+                                                    pageSize = ${pageSize}
+                                                    )}" th:text="${page}"></a>
+                                                        </th:block>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <footer class="footer footer-transparent d-print-none">
+        </footer>
+    </div>
+</div>
+
+<!-- Info-Modal -->
+<div class="modal modal-blur fade " id="shop-info-modal" tabindex="-1" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Info</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-borderless w-25">
+            <tr>
+                <td>Name</td>
+                <td>:</td>
+                <td id="info-name"></td>
+            </tr>
+            <tr>
+                <td>Category </td>
+                <td>:</td>
+                <td id="info-category"></td>
+            </tr>
+            <tr>
+                <td> Description </td>
+                <td>:</td>
+                <td id="info-description"></td>
+            </tr>
+            <tr>
+                <td>Price </td>
+                <td>:</td>
+                <td id="info-price"></td>
+            </tr>
+            <tr>
+              <td>Seller Name </td>
+              <td>:</td>
+              <td id="info-seller"></td>
+          </tr>
+        </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Cart Modal -->
+<div class="modal modal-blur fade" id="shop-cart-modal" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="modal-title">Cart</div>
+          <div>
+            <form method="post" class="cart-form mb-3">
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">Quantity <span class="text-danger" th:errors="${reqDto.quantity}"></span></label>
+                    <input name="quantity" type="number" class="form-control" id="quantity">
+                  </div>
+                  <div class="mb-3"> 
+                        <label for="shipperId" class="form-label">Shipment <span class="text-danger" th:errors="${reqDto.shipperId}"></span></label>
+                        <select name="shipperId" class="form-select" id="shipperId">
+                        <option selected disabled>Choose Shipper</option>
+                        <option th:each="shipper : ${shippers}" th:value="${shipper.id}" th:text="${shipper.name}"></option>
+                        </select>
+                    </div>
+                  <button type="submit" class="btn btn-outline-success w-50">Add to cart</button>
+                
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<div th:if="${showModal}">
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+          var myModal = new bootstrap.Modal(document.getElementById('shop-cart-modal'));
+          myModal.show();
+        });
+    </script>
+</div>
+</html>

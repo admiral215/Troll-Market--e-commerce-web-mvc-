@@ -1,0 +1,132 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta19
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+<head th:replace="~{layout::head('Troll Market - Cart')}">
+</head>
+<body>
+<div class="page">
+    <!-- Navbar -->
+    <header th:replace="~{layout :: header}" class="navbar navbar-expand-md d-print-none">
+    </header>
+    <nav th:replace="~{layout :: nav}" class="navbar-expand-md">
+    </nav>
+    <div class="page-wrapper">
+        <!-- Page body -->
+        <div class=" navbar-expand-md">
+            <div href="#" class="card card-link">
+                <div class="card-body">
+                    <a href="/cart">My Cart</a>
+                </div>
+            </div>
+        </div>
+        <div class="page-body">
+            <div class=" page-body container-xl d-flex flex-column align-items-center">
+
+                <div th:if="${purchaseFailed}" class="toast mb-3 align-self-start show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-danger">
+                      <strong class="me-auto text-white">Purchase Failed</strong>
+                      <button type="button" class="btn-close text-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Your balance is insufficient, please top up your balance first
+                    </div>
+                  </div>
+
+                <!-- Card Table-->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-status-top bg-danger"></div>
+                        <div class="card-body">
+                            <h3 class="card-title mb-3">My Cart</h3>
+                            <a href="#" class="btn btn-outline-primary mb-4" data-bs-toggle="modal"
+                               data-bs-target="#purchase-modal">
+                                Purchase All
+                            </a>
+
+                            <div class="table-responsive">
+                                <table class="table table-vcenter card-table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Actions</th>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Shipment</th>
+                                        <th>Seller</th>
+                                        <th>Total Price</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="cart : ${carts}">
+                                        <td>
+                                            <div class="d-flex flex-row" style="width:50px">
+                                                <div class="">
+                                                    <form th:action="@{'/cart/delete/' + ${cart.id}}" method="post">
+                                                        <button type="submit"
+                                                                class="btn btn-outline-danger m-1">
+                                                            Remove
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        <td th:text="${cart.product}"></td>
+                                        <td th:text="${cart.quantity}"></td>
+                                        <td th:text="${cart.shipment}"></td>
+                                        <td th:text="${cart.seller}"></td>
+                                        <td th:text="${cart.totalPrice}"></td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="pagination justify-content-between">
+                                                <div th:if="${carts}">
+                                                    <p>
+                                                        page <span th:text="${carts.getNumber() + 1}"></span> of
+                                                        <span th:text="${carts.getTotalPages()}"></span>
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <th:block th:if="${carts.totalPages > 0}"
+                                                              th:each="page : ${#numbers.sequence(1, carts.totalPages)}">
+                                                        <a class="btn btn-outline-blue" th:href="@{/cart(
+                                                    pageNumber = ${page},
+                                                    pageSize = ${pageSize}
+                                                    )}" th:text="${page}"></a>
+                                                    </th:block>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <footer class="footer footer-transparent d-print-none">
+        </footer>
+    </div>
+</div>
+
+<div th:replace="~{pages/cartModal::modal(${purchaseInfo},${purchase})}">
+
+</div>
+
+
+<!-- Purchase Modal -->
+
+
+</body>
+</html>

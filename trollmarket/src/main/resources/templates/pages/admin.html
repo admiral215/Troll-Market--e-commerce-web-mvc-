@@ -1,0 +1,79 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta19
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+<head th:replace="~{layout::head('Troll Market - Admin')}">
+</head>
+<body>
+<div class="page">
+    <!-- Navbar -->
+    <header th:replace="~{layout :: header}" class="navbar navbar-expand-md d-print-none">
+    </header>
+    <nav th:replace="~{layout :: nav}" class="navbar-expand-md">
+    </nav>
+    <div class="page-wrapper">
+        <!-- Page body -->
+        <div class=" navbar-expand-md">
+            <div href="#" class="card card-link">
+              <div class="card-body">
+                <a href="/admin">Admin</a>
+              </div>
+            </div>
+          </div>
+        <div class="page-body">
+            <div class=" page-body container-xl d-flex flex-column align-items-center">
+
+                <!--Card Search-->
+                <div class="align-self-lg-start mb-4 col-lg-6" >
+                    <div class="card">
+                        <div class="card-status-start bg-primary"></div>
+                        <div class="card-body">
+                            <h2 class="h2 text-center mb-4">Add new Administrator</h2>
+                            <form th:action="@{/admin}" method="post" autocomplete="off" novalidate th:object="${dto}">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username <span class="text-danger" th:errors="*{username}"></span></label>
+                                    <input name="username" type="text" class="form-control" id="username" placeholder="Username">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label" for="password">
+                                        Password <span class="text-danger" th:errors="*{password}"></span>
+                                    </label>
+                                    <div class="input-group input-group-flat">
+                                        <input id="password" type="password" name="password" class="form-control"
+                                               placeholder="Your password">
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-danger" th:errors="${dto}"></div>
+                                    <label class="form-label" for="confirmPassword">
+                                        Confirm Password <span class="text-danger" th:errors="*{confirmPassword}"></span>
+                                    </label>
+                                    <div class="input-group input-group-flat">
+                                        <input id="confirmPassword" type="password" name="confirmPassword" class="form-control"
+                                               placeholder="Confirm password">
+                                    </div>
+                                </div>
+                                <div class="form-footer">
+                                    <button type="submit" class="btn btn-primary w-100">submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Table-->
+
+            </div>
+        </div>
+        <footer class="footer footer-transparent d-print-none">
+        </footer>
+    </div>
+</div>
+</body>
+</html>

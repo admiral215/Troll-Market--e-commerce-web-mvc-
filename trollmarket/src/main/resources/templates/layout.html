@@ -1,0 +1,200 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta19
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+<head th:fragment="head(title)">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+    <meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+    <title th:text="${title}"></title>
+    <!-- CSS files -->
+    <link rel="stylesheet" th:href="@{/resources/css/tabler.min.css?1684106062}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/tabler-flags.min.css?1684106062}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/tabler-payments.min.css?1684106062}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/tabler-vendors.min.css?1684106062}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/demo.min.css?1684106062}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/all.css}">
+    <!-- Libs JS -->
+    <link rel="icon" th:href="@{/resources/favicon.ico}" type="/image/x-icon">
+    <script defer th:src="@{/resources/js/tabler.min.js}"></script>
+    <script defer th:src="@{/resources/js/demo.min.js}"></script>
+    <script defer th:src="@{/resources/js/demo-theme.min.js}"></script>
+    <script defer th:src="@{/resources/js/layout.js}"></script>
+    <style>
+        @import url('https://rsms.me/inter/inter.css');
+        :root {
+            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
+        body {
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
+    </style>
+
+</head>
+<body>
+<div class="page">
+    <!-- Navbar -->
+    <header class="navbar navbar-expand-md d-print-none" th:fragment="header">
+        <div class="container-xl">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <a href="/home">
+                    Troll Market
+                </a>
+            </h1>
+            <div class="navbar-nav flex-row order-md-last">
+                <div class="nav-item dropdown">
+                    <a aria-label="Open user menu" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
+                       href="#">
+                        <span class="avatar avatar-sm">
+                            <i class="fas fa-user-alt"></i>
+                        </span>
+                        <div class="d-none d-xl-block ps-2">
+                            <div sec:authentication="name">Name</div>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                        <a class="dropdown-item" href="/profile">Profile</a>
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <nav class="navbar-expand-md" th:fragment="nav">
+        <div class="collapse navbar-collapse" id="navbar-menu">
+            <div class="navbar">
+                <div class="container-xl">
+                    <ul class="navbar-nav">
+                        <!--                <th:block sec:authorize="hasAuthority('ADMINISTRATOR','SELLER','BUYER')">-->
+                        <!--                </th:block>-->
+
+                        <th:block sec:authorize="hasAnyAuthority('ADMINISTRATOR','SELLER','BUYER')">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/home">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                      <i class="fas fa-home"></i>
+                                    </span>
+                                    <span class="nav-link-title">Home</span>
+                                </a>
+                            </li>
+                        </th:block>
+
+                        <th:block sec:authorize="hasAnyAuthority('SELLER','BUYER')">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/profile">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="fas fa-user-check"></i>
+                                    </span>
+                                    <span class="nav-link-title"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                      Profile
+                                    </span>
+                                </a>
+                            </li>
+                        </th:block>
+
+                        <th:block sec:authorize="hasAuthority('BUYER')">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/shop">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                    <i class="fas fa-shopping-basket"></i>
+                                    </span>
+                                    <span class="nav-link-title">
+                                    Shop
+                                    </span>
+                                </a>
+                            </li>
+                        </th:block>
+
+                        <th:block sec:authorize="hasAuthority('SELLER')">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/merchandise">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                    <i class="fab fa-dropbox"></i>
+                                    </span>
+                                    <span class="nav-link-title">
+                                    Merchandise
+                                    </span>
+                                </a>
+                            </li>
+                        </th:block>
+
+
+                        <th:block sec:authorize="hasAuthority('ADMINISTRATOR')">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/shipment">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                    <i class="fas fa-truck-moving"></i>
+                                    </span>
+                                    <span class="nav-link-title">
+                                    Shipment
+                                    </span>
+                                </a>
+                            </li>
+                        </th:block>
+
+
+                        <th:block sec:authorize="hasAuthority('BUYER')">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/cart">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </span>
+                                    <span class="nav-link-title">
+                                    My Cart
+                                    </span>
+                                </a>
+                            </li>
+                        </th:block>
+
+
+                        <th:block sec:authorize="hasAuthority('ADMINISTRATOR')">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                        <i class="fas fa-user-cog"></i>
+                                    </span>
+                                    <span class="nav-link-title">
+                                    Admin
+                                    </span>
+                                </a>
+                            </li>
+                        </th:block>
+
+
+                        <th:block sec:authorize="hasAnyAuthority('ADMINISTRATOR')">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/history">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                    <i class="fas fa-history"></i>
+                                    </span>
+                                    <span class="nav-link-title">
+                                    History
+                                    </span>
+                                </a>
+                            </li>
+                        </th:block>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="page-wrapper">
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl d-flex flex-column justify-content-center">
+            </div>
+        </div>
+        <footer class="footer footer-transparent d-print-none">
+        </footer>
+    </div>
+</div>
+
+</body>
+</html>
